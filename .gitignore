@@ -1,0 +1,17 @@
+# Virtual Environment
+venv/
+
+# Python Cache & Bytecode
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# IDE & OS Metadata
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Model Checkpoints (Uncomment the line below if densenet_tb_model.keras is larger than 100MB)
+# densenet_tb_model.keras

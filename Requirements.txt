@@ -1,0 +1,6 @@
+# Flask API Dependencies for Tuberculosis Detection Model
+flask>=3.0.0
+flask-cors>=4.0.0
+tensorflow>=2.15.0
+pillow>=10.0.0
+numpy>=1.26.0
