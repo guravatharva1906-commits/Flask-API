@@ -13,5 +13,10 @@ __pycache__/
 .DS_Store
 Thumbs.db
 
+# Docker Archives & Logs
+*.tar
+*.tar.gz
+*.log
+
 # Model Checkpoints (Uncomment the line below if densenet_tb_model.keras is larger than 100MB)
 # densenet_tb_model.keras
