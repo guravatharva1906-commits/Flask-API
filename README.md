@@ -1,34 +1,31 @@
-# 🫁 Tuberculosis Detection Flask API
+# 🫁 DenseNet121 Tuberculosis Diagnostic API
 
-A lightweight, high-performance Flask REST API powered by a fine-tuned **DenseNet** deep learning model (`densenet_tb_model.keras`). This service accepts chest X-ray images and classifies them into **Normal** or **Tuberculosis** with probability scores and clinical confidence levels.
+A high-performance, containerized Flask REST API for automated Tuberculosis (TB) screening from Chest X-rays using a fine-tuned **DenseNet121** deep learning model.
 
-Designed to serve as the AI microservice engine for full-stack (MERN) medical diagnostic applications.
-
----
-
-## 🚀 Key Features
-
-* **Optimized Inference:** Uses compiled C++ graph execution (`@tf.function`) to execute predictions in under 200ms on CPU.
-* **Safety Thresholding:** Implements a strict medical safety threshold (`0.35`) to prioritize detection sensitivity for Tuberculosis screening.
-* **Native In-Memory Preprocessing:** Decodes binary image data directly using TensorFlow C++ ops without disk I/O bottlenecks.
-* **MERN-Ready & CORS Enabled:** Cross-Origin Resource Sharing is enabled out of the box to communicate with Node.js/Express or React frontends.
+Designed for seamless microservice integration, low-latency execution, and cross-platform compatibility across Windows, macOS, and Linux via Docker.
 
 ---
 
-## 🛠️ Tech Stack
+## ⚡ Key Architecture & Performance Features
 
-* **Language:** Python 3.10+
-* **Framework:** Flask, Flask-CORS
-* **Deep Learning Engine:** TensorFlow 2.x / Keras (DenseNet121 Architecture)
-* **Image Processing:** TensorFlow Vision Engine, Pillow
+* **3-Tier Clinical Triage Logic:** Categorizes X-ray scans into actionable risk levels:
+  * **Normal (`<25%` risk):** No immediate follow-up required.
+  * **Examination Required (`25%–59.9%` risk):** Inconclusive gray zone flagged for radiologist review.
+  * **Tuberculosis (`≥60%` risk):** High-confidence detection prioritized for immediate clinical response.
+* **Native C++ Image Decoding:** Bypasses slow Python/PIL operations using `tf.io.decode_image` directly in C++ RAM.
+* **Compiled Graph Execution:** Uses `@tf.function(reduce_retracing=True)` to convert inference into a static C++ execution graph.
+* **Warmup Engine:** Executes dummy tensor graph compilation on startup to eliminate first-request latency.
+* **Thread-Safe CPU Parallelism:** Limits `intra/inter_op_parallelism` to prevent CPU lockups and thread thrashing.
+* **Production Docker Stack:** Containerized with `python:3.10-slim` and served via Gunicorn (1 worker, 2 threads) on **Port 5001**.
 
 ---
 
-## 📂 Project Structure
+## 📁 Repository Structure
 
 ```text
-Flask-API/
-├── app.py                   # Main Flask application and model pipeline
-├── densenet_tb_model.keras  # Trained DenseNet model file
-├── requirements.txt         # Project dependencies
-└── .gitignore               # Git untracked files setup
+├── app.py                     # Main Flask application with fast C++ image pipeline
+├── densenet_tb_model.keras    # Trained DenseNet121 model weights (~51.9 MB)
+├── Dockerfile                 # Production Docker configuration (Gunicorn + Python 3.10)
+├── requirements.txt           # Dependency requirements (pinned numpy < 2.0.0)
+├── .gitignore                 # Git rules ignoring environment and build artifacts
+└── README.md                  # Project documentation
